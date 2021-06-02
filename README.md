@@ -1,3 +1,3 @@
 # RiskAndReward
 
-Evolving individuals (in the form of trees) to asses offers/
+Evolving individuals (in the form of trees) to asses offers.
