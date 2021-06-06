@@ -66,6 +66,14 @@ def choose_node(node):
 		else:
 			return node.right
 
+# print each function in a tree, starting at the specified node
+def traverse(node):
+		if not node:
+			return
+		traverse(node.left)
+		traverse(node.right)
+		print(node.func)
+
 ## beginning of definitions for primitive set
 
 funcs = ['take_over10', 'take_over20', 'take_over50', 'take_over100', 'cost_over10', 'cost_over15', 'cost_over20', 'cost_over25',
@@ -300,7 +308,7 @@ def recombination(p1, p2):
 	p1.getsize(p1.root)
 	p2.getsize(p2.root)
 	
-	prob = 1/p1.size
+	prob = 1/(p1.size/2)
 	
 	node = child.root
 	
@@ -309,7 +317,7 @@ def recombination(p1, p2):
 #			break
 		if random.random() < prob:
 			# select a node from the other parent to copy and insert into the child
-			cx_branch = p2.get_randnode(1/p2.size)
+			cx_branch = p2.get_randnode(1/(p2.size/2))
 			if random.random() < 0.5:
 				node.left = cx_branch.copy(cx_branch.func)
 				break
@@ -319,6 +327,11 @@ def recombination(p1, p2):
 		node = choose_node(node)
 	
 	return child
+
+# I'm thinking that mutation will involve traversing a random path, picking a node with
+# probability pm, and randomly choosing a different function to assign to the node
+def mutation(ind, pm):
+	pass
 
 def gen_ind():
 	ind = Brain(Node('root'))
@@ -388,5 +401,8 @@ def main(popsize, gens):
 	return fittest
 
 if __name__ == "__main__":
-	ind = main(12, 50)
+	ind = main(60, 50)
 	print(eval(ind))
+	traverse(ind.root)
+	ind.getsize(ind.root)
+	print(ind.size)
