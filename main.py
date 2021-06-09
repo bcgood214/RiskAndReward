@@ -6,6 +6,7 @@ class Node:
 		self.func = func
 		self.right = right
 		self.left = left
+		self.weight = 1
 	
 	def copy(self, func):
 		left = None
@@ -19,8 +20,8 @@ class Node:
 		
 		return Node(func, right=right, left=left)
 	
-	def run(self, cost, prob, reward):
-		return globals()[self.func](self, cost, prob, reward)
+	def run(self, cost, prob, reward, path):
+		return globals()[self.func](self, cost, prob, reward, path)
 
 class Brain:
 	
@@ -48,23 +49,27 @@ class Brain:
 			else:
 				node = child
 	
-	def think(self, cost, prob, reward):
-		return self.root.run(cost, prob, reward)
+	def think(self, cost, prob, reward, path):
+		return self.root.run(cost, prob, reward, path)
 		
 		
 
 
 # choose from up to two child nodes	
-def choose_node(node):
+def choose_node(node, weighted=False):
 	if not node.right:
 		return node.left
 	elif not node.left:
 		return node.right
 	else:
-		if random.random() < 0.5:
-			return node.left
+		if not weighted:
+			if random.random() < 0.5:
+				return node.left
+			else:
+				return node.right
 		else:
-			return node.right
+			choice = random.choices([node.left, node.right], [node.left.weight, node.right.weight], k=1)[0]
+			return choice
 
 # print each function in a tree, starting at the specified node
 def traverse(node):
@@ -83,175 +88,190 @@ funcs = ['take_over10', 'take_over20', 'take_over50', 'take_over100', 'cost_over
 # conns is meant to store which functions can be called by a given function/node
 #conns = {}
 
-def root(node, cost, prob, reward):
-	node = choose_node(node)
+def root(node, cost, prob, reward, path):
+	node = choose_node(node, True)
 	if node is None:
 		print("Invalid root")
 	else:
-		return node.run(cost, prob, reward)
+		return node.run(cost, prob, reward, path)
 #conns['root'] = [True for _ in range(len(funcs))]
 
-def take_over10(node, cost, prob, reward):
+def take_over10(node, cost, prob, reward, path):
 	if reward > 10:
-		res = choose_node(node)
+		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 	else:
 		return False
 #conns['take_over10'] = [True for _ in range(len(funcs))]
 
-def take_over20(node, cost, prob, reward):
+def take_over20(node, cost, prob, reward, path):
 	if reward > 20:
-		res = choose_node(node)
+		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 	else:
 		return False
 #conns['take_over20'] = [True for _ in range(len(funcs))]
 
-def take_over50(node, cost, prob, reward):
+def take_over50(node, cost, prob, reward, path):
 	if reward > 50:
-		res = choose_node(node)
+		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 	else:
 		return False
 #conns['take_over50'] = [True for _ in range(len(funcs))]
 
-def take_over100(node, cost, prob, reward):
+def take_over100(node, cost, prob, reward, path):
 	if reward > 100:
-		res = choose_node(node)
+		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 	else:
 		return False
 #conns['take_over100'] = [True for _ in range(len(funcs))]
 
-def cost_over10(node, cost, prob, reward):
+def cost_over10(node, cost, prob, reward, path):
 	if cost > 10:
 		return False
 	else:
-		res = choose_node(node)
+		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 #conns['cost_over10'] = [True for _ in range(len(funcs))]
 
-def cost_over15(node, cost, prob, reward):
+def cost_over15(node, cost, prob, reward, path):
 	if cost > 15:
 		return False
 	else:
-		res = choose_node(node)
+		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 #conns['cost_over15'] = [True for _ in range(len(funcs))]
 
-def cost_over20(node, cost, prob, reward):
+def cost_over20(node, cost, prob, reward, path):
 	if cost > 20:
 		return False
 	else:
-		res = choose_node(node)
+		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 #conns['cost_over20'] = [True for _ in range(len(funcs))]
 
-def cost_over25(node, cost, prob, reward):
+def cost_over25(node, cost, prob, reward, path):
 	if cost > 25:
 		return False
 	else:
-		res = choose_node(node)
+		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 #conns['cost_over25'] = [True for _ in range(len(funcs))]
 
-def cost_over30(children, cost, prob, reward):
+def cost_over30(children, cost, prob, reward, path):
 	if cost > 30:
 		return False
 	else:
-		res = choose_node(children)
+		res = choose_node(children, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 #conns['cost_over30'] = [True for _ in range(len(funcs))]
 
-def cost_over40(children, cost, prob, reward):
+def cost_over40(children, cost, prob, reward, path):
 	if cost > 40:
 		return False
 	else:
-		res = choose_node(children)
+		res = choose_node(children, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 #conns['cost_over40'] = [True for _ in range(len(funcs))]
 
-def cost_over50(children, cost, prob, reward):
+def cost_over50(children, cost, prob, reward, path):
 	if cost > 50:
 		return False
 	else:
-		res = choose_node(children)
+		res = choose_node(children, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 #conns['cost_over50'] = [True for _ in range(len(funcs))]
 
-def prob_over10(children, cost, prob, reward):
+def prob_over10(children, cost, prob, reward, path):
 	if prob > 0.1:
-		res = choose_node(children)
+		res = choose_node(children, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 	else:
 		return False
 #conns['prob_over10'] = [True for _ in range(len(funcs))]
 
-def prob_over15(children, cost, prob, reward):
+def prob_over15(children, cost, prob, reward, path):
 	if prob > 0.15:
-		res = choose_node(children)
+		res = choose_node(children, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 	else:
 		return False
 #conns['prob_over15'] = [True for _ in range(len(funcs))]
 
-def prob_over20(children, cost, prob, reward):
+def prob_over20(children, cost, prob, reward, path):
 	if prob > 0.20:
-		res = choose_node(children)
+		res = choose_node(children, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 	else:
 		return False
 #conns['prob_over20'] = [True for _ in range(len(funcs))]
 
-def prob_over30(children, cost, prob, reward):
+def prob_over30(children, cost, prob, reward, path):
 	if prob > 0.30:
-		res = choose_node(children)
+		res = choose_node(children, True)
 		if res is None:
 			return True
 		else:
-			return res.run(cost, prob, reward)
+			path.append(res)
+			return res.run(cost, prob, reward, path)
 	else:
 		return False
 #conns['prob_over30'] = [True for _ in range(len(funcs))]
@@ -267,10 +287,11 @@ def eval(ind):
 		cost = random.randint(1, 150)
 		prob = random.random()
 		reward = random.randint(1, 150)
+		path = []
 		
 		# if 'think' returns true, the brain accepted the offer,
 		# if false, it declined
-		ans = ind.think(cost, prob, reward)
+		ans = ind.think(cost, prob, reward, path)
 		#print(ans)
 		
 		res = False
@@ -279,8 +300,12 @@ def eval(ind):
 		
 		if ans and res:
 			score += reward
+			for edge in path:
+				edge.weight += 1
 		if ans and not res:
-			score -= reward
+			score -= cost
+			for edge in path:
+				edge.weight -= 1
 	
 	return score
 

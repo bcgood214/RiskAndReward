@@ -21,7 +21,5 @@ and probability of success
 a branch from parent B at a randomly selected point
 
 Future Proposals
-- Currently, when a node has a left and right child, it randomly selects between the two to determine the next node in the
-path, but I intend to have a weight system that can make one option more likely
 - Evolving the functions themselves, which effectively means multilayered evolutionary computation whereby functions are evolved
 and subsequently used as building blocks for individuals
