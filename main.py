@@ -401,7 +401,7 @@ def main(popsize, gens):
 	return fittest
 
 if __name__ == "__main__":
-	ind = main(60, 50)
+	ind = main(60, 250)
 	print(eval(ind))
 	traverse(ind.root)
 	ind.getsize(ind.root)
