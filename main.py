@@ -86,6 +86,7 @@ funcs = ['take_over10', 'take_over20', 'take_over50', 'take_over100', 'cost_over
  'prob_over10', 'prob_over15', 'prob_over20', 'prob_over30']
 
 # conns is meant to store which functions can be called by a given function/node
+# Currently, I do not intend to implement conns or an alternative approach.
 #conns = {}
 
 def root(node, cost, prob, reward, path):
