@@ -77,7 +77,7 @@ def traverse(node):
 			return
 		traverse(node.left)
 		traverse(node.right)
-		print(node.func)
+		print("{}, {}".format(node.func, node.weight))
 
 ## beginning of definitions for primitive set
 
@@ -309,7 +309,7 @@ def eval(ind):
 	
 	return score
 
-# generate an individual's tress
+# generate an individual's tree
 def gen_tree(size):
 	ind = Brain(Node('func'))
 	
@@ -395,7 +395,7 @@ def main(popsize, gens):
 			c2 = recombination(parents[1], parents[0])
 			nextgen.append(c2)
 			
-			# I though this was an interesting route to take for selection, but
+			# I thought this was an interesting route to take for selection, but
 			# I decided against it
 #			selections = random.choices(pool, k=8)
 			
