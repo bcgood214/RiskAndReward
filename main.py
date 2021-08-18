@@ -1,7 +1,7 @@
 import random, math
 import function_generation as funcgen
 
-FUNCPOOL_SIZE = 20
+FUNCPOOL_SIZE = 15
 funcs = [[funcgen.fg(), funcgen.gen_name(), 1] for i in range(FUNCPOOL_SIZE)]
 
 class Node:
@@ -150,7 +150,7 @@ def func_counter(node):
 		return
 	for f in funcs:
 		if funcs[1] == node.func[1]:
-			funcs[2] += 1
+			funcs[2] += (node.weight//2)
 	func_counter(node.left)
 	func_counter(node.right)
 
@@ -221,7 +221,7 @@ def main(popsize, gens):
 		for ind in pool:
 			fitness.append(eval(ind))
 		
-		if gen//25 == 0 and gen > 0:
+		if gen//25 == 0 and gen > 0 and gen < gens:
 			nextgen_funcs = []
 			for i in range(FUNCPOOL_SIZE):
 				selected_inds = random.choices(pool, fitness, k=4)
@@ -273,7 +273,7 @@ def main(popsize, gens):
 	return fittest
 
 if __name__ == "__main__":
-	ind = main(60, 50)
+	ind = main(20, 200)
 	print(eval(ind))
 	print("Start of traversal:")
 	traverse(ind.root)

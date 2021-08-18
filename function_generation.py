@@ -2,7 +2,9 @@
 # 2021-07-16
 # Test program for genetic programming
 
-import math, random, string
+import math, random, string, sys
+
+sys.setrecursionlimit(1500)
 
 DEPTH = 5
 success_prob = 0.5
@@ -171,11 +173,15 @@ def pick_fromargs(elems, nt):
 # 'nt' for node type
 def pick_node(node, prob, nt="generic"):
 	if nt == "op":
+		# if the node is a comparison operator and the probability threshold is met, return
 		if node in CMP_OPS and random.random() < prob:
 			return node
+		# if the node isn't a comparison operator, but it is a tuple, call pick_fromargs
+		# - to continue the search from the arguments
 		elif type(node) is tuple:
 			return pick_fromargs(node[1:], nt)
 		else:
+			# if a terminal has been reached (that didn't meet the first set of conditions), return None
 			return None
 	
 	if nt == "cmp":
