@@ -84,7 +84,7 @@ def cost_under(arg1):
 	
 ## end of function definitions
 
-term_set = [int_value, double_value, get_prob, get_reward, get_cost]
+term_set = [get_prob, get_reward, get_cost]
 func_set = [prob_under, cost_under, reward_over, ifelse]
 
 def gen_expr(func_set, term_set, method, max_depth, set_prob = 1):
