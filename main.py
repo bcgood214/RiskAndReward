@@ -1,7 +1,7 @@
 import random, math
 import alt_function as funcgen
 
-FUNCPOOL_SIZE = 200
+FUNCPOOL_SIZE = 24
 funcs = [[funcgen.fg(), funcgen.gen_name(), 1] for i in range(FUNCPOOL_SIZE)]
 
 class Node:
@@ -286,8 +286,5 @@ def main(popsize, gens):
 if __name__ == "__main__":
 	ind = main(12, 200)
 	print(eval(ind))
-	print("Start of traversal:")
-	traverse(ind.root)
-	print("End of traversal")
 	ind.getsize(ind.root)
 	print(ind.size)
