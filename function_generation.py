@@ -216,7 +216,7 @@ def recombination(node, other):
 	else:
 		subtree = pick_node(other, 1/get_size(other))
 	# Potentially use the subtree for copying genetic material to child, otherwise use first parent
-	if random.random() < 1/get_size(node):
+	if random.random() < 1/get_size(node) and subtree is not None:
 		node = subtree
 	if type(node) is tuple:
 		# Call the recombination function again if an argument is a function, otherwise just get terminal from tree
@@ -282,11 +282,37 @@ def run(func):
 		return func
 
 def fg():
-	return gen_expr(func_set, term_set, 'grow', 5, 0.5)
+	return gen_expr(func_set, term_set, 'grow', 5, 0.9)
+
+def main(gens, popsize):
+	pool = [gen_expr(func_set, term_set, 'grow', 5, 0.6) for i in range(popsize)]
+	
+	for gen in range(gens):
+		if gen//20 == 0:
+			print("Printing individuals:")
+			for ind in pool:
+				print(ind)
+			print("End of pool")
+			
+		nextgen = []
+		for i in range(popsize):
+			parents = random.choices(pool, k=2)
+			
+			child = recombination(parents[0], parents[1])
+			
+			nextgen.append(child)
+			
+		pool = nextgen
+	
+	print("Printing individuals:")
+	for ind in pool:
+		print(ind)
+		print("End of pool")
 
 if __name__ == "__main__":
-	func1 = gen_expr(func_set, term_set, 'grow', 5, 0.3)
-	func2 = gen_expr(func_set, term_set, 'grow', 5, 0.6)
-	func3 = recombination(func1, func2)
-	print(run(func1))
-	print(func3)
+#	func1 = gen_expr(func_set, term_set, 'grow', 5, 0.3)
+#	func2 = gen_expr(func_set, term_set, 'grow', 5, 0.6)
+#	func3 = recombination(func1, func2)
+#	print(run(func1))
+#	print(func3)
+	main(200, 10)

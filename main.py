@@ -1,7 +1,7 @@
 import random, math
 import function_generation as funcgen
 
-FUNCPOOL_SIZE = 15
+FUNCPOOL_SIZE = 12
 funcs = [[funcgen.fg(), funcgen.gen_name(), 1] for i in range(FUNCPOOL_SIZE)]
 
 class Node:
@@ -222,6 +222,16 @@ def main(popsize, gens):
 			fitness.append(eval(ind))
 		
 		if gen//25 == 0 and gen > 0 and gen < gens:
+#			print("Printing functions")
+#			for f in funcs:
+#				print(f)
+#				print("End of function")
+#			print("End of functions")
+#			print("Print pool")
+#			for i in pool:
+#				traverse(i.root)
+#				print("End of individual")
+#			print("End of pool")
 			nextgen_funcs = []
 			for i in range(FUNCPOOL_SIZE):
 				selected_inds = random.choices(pool, fitness, k=4)
@@ -273,7 +283,7 @@ def main(popsize, gens):
 	return fittest
 
 if __name__ == "__main__":
-	ind = main(20, 200)
+	ind = main(6, 200)
 	print(eval(ind))
 	print("Start of traversal:")
 	traverse(ind.root)
