@@ -1,4 +1,8 @@
 import random, math
+import function_generation as funcgen
+
+FUNCPOOL_SIZE = 20
+funcs = [[funcgen.fg(), funcgen.gen_name(), 1] for i in range(FUNCPOOL_SIZE)]
 
 class Node:
 	
@@ -20,8 +24,9 @@ class Node:
 		
 		return Node(func, right=right, left=left)
 	
-	def run(self, cost, prob, reward, path):
-		return globals()[self.func](self, cost, prob, reward, path)
+	def run(self, path):
+		#return globals()[self.func](self, cost, prob, reward, path)
+		return func_wrapper(self.func[0], self, path)
 
 class Brain:
 	
@@ -50,7 +55,10 @@ class Brain:
 				node = child
 	
 	def think(self, cost, prob, reward, path):
-		return self.root.run(cost, prob, reward, path)
+		funcgen.cost = cost
+		funcgen.success_prob = prob
+		funcgen.reward = reward
+		return self.root.run(path)
 		
 		
 
@@ -77,207 +85,18 @@ def traverse(node):
 			return
 		traverse(node.left)
 		traverse(node.right)
-		print("{}, {}".format(node.func, node.weight))
+		print("{}, weight: {}".format(node.func, node.weight))
 
-## beginning of definitions for primitive set
-
-funcs = ['take_over10', 'take_over20', 'take_over50', 'take_over100', 'cost_over10', 'cost_over15', 'cost_over20', 'cost_over25',
- 'cost_over30', 'cost_over40', 'cost_over50',
- 'prob_over10', 'prob_over15', 'prob_over20', 'prob_over30']
-
-# conns is meant to store which functions can be called by a given function/node
-# Currently, I do not intend to implement conns or an alternative approach.
-#conns = {}
-
-def root(node, cost, prob, reward, path):
-	node = choose_node(node, True)
-	if node is None:
-		print("Invalid root")
-	else:
-		return node.run(cost, prob, reward, path)
-#conns['root'] = [True for _ in range(len(funcs))]
-
-def take_over10(node, cost, prob, reward, path):
-	if reward > 10:
+def func_wrapper(f, node, path):
+	if funcgen.run(f):
 		res = choose_node(node, True)
 		if res is None:
 			return True
 		else:
 			path.append(res)
-			return res.run(cost, prob, reward, path)
+			return res.run(path)
 	else:
 		return False
-#conns['take_over10'] = [True for _ in range(len(funcs))]
-
-def take_over20(node, cost, prob, reward, path):
-	if reward > 20:
-		res = choose_node(node, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-	else:
-		return False
-#conns['take_over20'] = [True for _ in range(len(funcs))]
-
-def take_over50(node, cost, prob, reward, path):
-	if reward > 50:
-		res = choose_node(node, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-	else:
-		return False
-#conns['take_over50'] = [True for _ in range(len(funcs))]
-
-def take_over100(node, cost, prob, reward, path):
-	if reward > 100:
-		res = choose_node(node, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-	else:
-		return False
-#conns['take_over100'] = [True for _ in range(len(funcs))]
-
-def cost_over10(node, cost, prob, reward, path):
-	if cost > 10:
-		return False
-	else:
-		res = choose_node(node, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-#conns['cost_over10'] = [True for _ in range(len(funcs))]
-
-def cost_over15(node, cost, prob, reward, path):
-	if cost > 15:
-		return False
-	else:
-		res = choose_node(node, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-#conns['cost_over15'] = [True for _ in range(len(funcs))]
-
-def cost_over20(node, cost, prob, reward, path):
-	if cost > 20:
-		return False
-	else:
-		res = choose_node(node, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-#conns['cost_over20'] = [True for _ in range(len(funcs))]
-
-def cost_over25(node, cost, prob, reward, path):
-	if cost > 25:
-		return False
-	else:
-		res = choose_node(node, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-#conns['cost_over25'] = [True for _ in range(len(funcs))]
-
-def cost_over30(children, cost, prob, reward, path):
-	if cost > 30:
-		return False
-	else:
-		res = choose_node(children, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-#conns['cost_over30'] = [True for _ in range(len(funcs))]
-
-def cost_over40(children, cost, prob, reward, path):
-	if cost > 40:
-		return False
-	else:
-		res = choose_node(children, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-#conns['cost_over40'] = [True for _ in range(len(funcs))]
-
-def cost_over50(children, cost, prob, reward, path):
-	if cost > 50:
-		return False
-	else:
-		res = choose_node(children, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-#conns['cost_over50'] = [True for _ in range(len(funcs))]
-
-def prob_over10(children, cost, prob, reward, path):
-	if prob > 0.1:
-		res = choose_node(children, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-	else:
-		return False
-#conns['prob_over10'] = [True for _ in range(len(funcs))]
-
-def prob_over15(children, cost, prob, reward, path):
-	if prob > 0.15:
-		res = choose_node(children, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-	else:
-		return False
-#conns['prob_over15'] = [True for _ in range(len(funcs))]
-
-def prob_over20(children, cost, prob, reward, path):
-	if prob > 0.20:
-		res = choose_node(children, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-	else:
-		return False
-#conns['prob_over20'] = [True for _ in range(len(funcs))]
-
-def prob_over30(children, cost, prob, reward, path):
-	if prob > 0.30:
-		res = choose_node(children, True)
-		if res is None:
-			return True
-		else:
-			path.append(res)
-			return res.run(cost, prob, reward, path)
-	else:
-		return False
-#conns['prob_over30'] = [True for _ in range(len(funcs))]
-
-## end of definitions for primitive set
 
 # fitness evaluation
 def eval(ind):
@@ -324,6 +143,20 @@ def gen_tree(size):
 			f = random.choice(funcs)
 			node.right = Node(f)
 		node = choose_node(node)
+# tree traversal where each node linked to a function in the current results in
+# - the counter for that function being incremented
+def func_counter(node):
+	if not node:
+		return
+	for f in funcs:
+		if funcs[1] == node.func[1]:
+			funcs[2] += 1
+	func_counter(node.left)
+	func_counter(node.right)
+
+def count_funcs(inds):
+	for i in inds:
+		func_counter(i.root)
 
 # recombination between two parents is performed by randomly selecting one of two parents,
 # copying the individual, and then (stochastically) selecting a node as the crossover point,
@@ -378,6 +211,7 @@ def gen_pop(size):
 	return pop
 
 def main(popsize, gens):
+	global funcs
 	pool = gen_pop(popsize)
 	
 	for gen in range(gens):
@@ -386,6 +220,18 @@ def main(popsize, gens):
 		
 		for ind in pool:
 			fitness.append(eval(ind))
+		
+		if gen//25 == 0 and gen > 0:
+			nextgen_funcs = []
+			for i in range(FUNCPOOL_SIZE):
+				selected_inds = random.choices(pool, fitness, k=4)
+				count_funcs(selected_inds)
+				func_fitness = [f[2] for f in funcs]
+				func_parents = random.choices(funcs, func_fitness, k=2)
+				child = funcgen.recombination(func_parents[0][0], func_parents[1][0])
+				nextgen_funcs.append([child, funcgen.gen_name(), 1])
+			
+			funcs = nextgen_funcs
 		
 		for i in range(popsize//2):
 			parents = random.choices(pool, fitness, k=2)
@@ -427,8 +273,10 @@ def main(popsize, gens):
 	return fittest
 
 if __name__ == "__main__":
-	ind = main(60, 250)
+	ind = main(60, 50)
 	print(eval(ind))
+	print("Start of traversal:")
 	traverse(ind.root)
+	print("End of traversal")
 	ind.getsize(ind.root)
 	print(ind.size)
