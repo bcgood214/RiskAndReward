@@ -4,7 +4,7 @@
 
 import math, random, string, sys
 
-sys.setrecursionlimit(1500)
+sys.setrecursionlimit(3000)
 
 DEPTH = 5
 success_prob = 0.5
@@ -179,7 +179,16 @@ def pick_node(node, prob, nt="generic"):
 		# if the node isn't a comparison operator, but it is a tuple, call pick_fromargs
 		# - to continue the search from the arguments
 		elif type(node) is tuple:
-			return pick_fromargs(node[1:], nt)
+			#return pick_fromargs(node[1:], nt)
+			options = []
+			for n in node[1:]:
+				res = pick_node(n, prob, nt=nt)
+				if res is not None:
+					options.append(res)
+			if options:
+				return random.choice(options)
+			else:
+				return None
 		else:
 			# if a terminal has been reached (that didn't meet the first set of conditions), return None
 			return None
@@ -190,7 +199,16 @@ def pick_node(node, prob, nt="generic"):
 				return node
 			else:
 				# Since cmp_vals function is being searched for, there is no need to look at the first argument
-				return pick_fromargs(node[2:], nt)
+				#return pick_fromargs(node[2:], nt)
+				options = []
+				for n in node[1:]:
+					res = pick_node(n, prob, nt=nt)
+					if res is not None:
+						options.append(res)
+				if options:
+					return random.choice(options)
+				else:
+					return None
 		else:
 			return None
 				
@@ -198,7 +216,16 @@ def pick_node(node, prob, nt="generic"):
 		return node
 	
 	if type(node) is tuple:
-		return pick_fromargs(node[1:], nt)
+		#return pick_fromargs(node[1:], nt)
+		options = []
+		for n in node[1:]:
+			res = pick_node(n, prob, nt=nt)
+			if res is not None:
+				options.append(res)
+		if options:
+			return random.choice(options)
+		else:
+			return None
 
 # Recombination should be restricted for comparison functions and operators
 
@@ -288,7 +315,7 @@ def main(gens, popsize):
 	pool = [gen_expr(func_set, term_set, 'grow', 5, 0.6) for i in range(popsize)]
 	
 	for gen in range(gens):
-		if gen//20 == 0:
+		if gen % 5 == 0:
 			print("Printing individuals:")
 			for ind in pool:
 				print(ind)
@@ -304,10 +331,10 @@ def main(gens, popsize):
 			
 		pool = nextgen
 	
-	print("Printing individuals:")
+	print("Printing final pool:")
 	for ind in pool:
 		print(ind)
-		print("End of pool")
+	print("End of pool")
 
 if __name__ == "__main__":
 #	func1 = gen_expr(func_set, term_set, 'grow', 5, 0.3)
@@ -315,4 +342,4 @@ if __name__ == "__main__":
 #	func3 = recombination(func1, func2)
 #	print(run(func1))
 #	print(func3)
-	main(200, 10)
+	main(50, 10)

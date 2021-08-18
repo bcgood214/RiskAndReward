@@ -90,7 +90,6 @@ func_set = [prob_under, cost_under, reward_over, ifelse]
 def gen_expr(func_set, term_set, method, max_depth, set_prob = 1):
 	if random.random() < set_prob or max_depth == 0:
 		expr = random.choice(term_set)
-		expr = expr()
 	else:
 		func = random.choice(func_set)
 		if func.__name__ == "ifelse":
@@ -154,7 +153,9 @@ def recombination(node, other):
 	arg1 = None
 	arg2 = None
 	# Get subtree from other parent
-	subtree = pick_node(other, 1/get_size(other))
+	subtree = pick_node(other, 0.3)
+	while subtree is None:
+		subtree = pick_node(other, 0.3)
 	# Potentially use the subtree for copying genetic material to child, otherwise use first parent
 	if random.random() < 1/get_size(node) * 0.5:
 		node = subtree
@@ -225,8 +226,11 @@ def eval(ind):
 	
 
 def run(func):
-	if type(func) is not list:
+	#print(func)
+	if type(func) == str:
 		return func
+	if type(func) is not list:
+		return func()
 	if len(func) == 2:
 		return func[0](func[1])
 	elif len(func) == 4:
