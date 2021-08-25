@@ -20,6 +20,7 @@ and probability of success
 - Recombination is done by selecting two parents (currently tournament selection), copying parent A, and (potentially) inserting
 a branch from parent B at a randomly selected point
 
-Future Proposals
+Evolving Functions
 - Evolving the functions themselves, which effectively means multilayered evolutionary computation whereby functions are evolved
 and subsequently used as building blocks for individuals
+- The fitness of functions can be evaluated by counting the number of times they bare present in (relatively) fit individuals, and the count can be added to their weight when selecitng functions from the pool for reproduction
