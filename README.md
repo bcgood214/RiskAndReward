@@ -9,6 +9,9 @@ Individual "Brains"
 - These trees consist of nodes that refer to functions
 - Individuals "think" by running the function in the root node first and following a path to a leaf
 - An EA is implemented to generate individuals
+- As is, functions will return _True_ or _False_
+- The "thought" process will terminate with a negative answer if a function in the path returns False
+- If the function referred to by the currently active node returns True, the next node in the path will be evaluated, or the process will end with an affirmative answer if the node is a leaf.
 
 Fitness Evaluation
 - The fitness of an individual is evalutated by running a series of trials
